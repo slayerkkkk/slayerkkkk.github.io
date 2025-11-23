@@ -1,0 +1,9 @@
+@font-face {
+  font-family: "gohu";
+  src: url("../files/font/gohu.woff2") format("woff2"),
+       url("../files/font/gohu.woff") format("woff"),
+       url("../files/font/gohu.ttf") format("truetype");
+  font-weight: normal;
+  font-style: normal;
+}
+

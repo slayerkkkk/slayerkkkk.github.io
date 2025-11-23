@@ -1,0 +1,773 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>~/slayer</title>
+    <link rel="shortcut icon" href="images/gifs/chinese.gif" type="image/x-icon">
+    <style>
+        @font-face {
+            font-family: "gohu";
+            src: url("/files/font/gohu.woff2") format("woff2"),
+                url("/files/font/gohu.woff") format("woff"),
+                url("/files/font/gohu.ttf") format("truetype");
+            font-weight: normal;
+            font-style: normal;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        :root {
+            --bg-color: #000000;
+            --text-color: #f0f0f0;
+            --accent-purple: #8b5cf6;
+            --accent-purple-light: #a78bfa;
+            --border-color: #1f1f1f;
+            --paper-bg: #0f0f0f;
+            --paper-hover: #1a1a1a;
+        }
+
+        body {
+            background-color: var(--bg-color);
+            color: var(--text-color);
+            font-family: "gohu", monospace;
+            font-size: 16px;
+            line-height: 1.6;
+            padding: 20px;
+            max-width: 1200px;
+            margin: 0 auto;
+            overflow-x: hidden;
+            position: relative;
+        }
+
+        .background {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: -1;
+            pointer-events: none;
+            color: rgba(139, 92, 246, 0.1);
+            font-family: monospace;
+            white-space: pre;
+            overflow: hidden;
+        }
+
+        .ascii {
+            text-align: center;
+            margin: 30px 0 50px;
+            overflow-x: auto;
+            position: relative;
+        }
+
+        .bannerAscii {
+            font-family: monospace;
+            line-height: 19px;
+            white-space: pre;
+            color: var(--accent-purple-light);
+            margin: 0 auto;
+            display: inline-block;
+            position: relative;
+        }
+
+        .banner-text {
+            color: var(--accent-purple-light);
+            font-size: 25px;
+            margin-top: 15px;
+            letter-spacing: 2px;
+        }
+
+        .sectionMenu {
+            background-color: var(--paper-bg);
+            border: 1px solid var(--border-color);
+            padding: 20px;
+            margin-bottom: 40px;
+            border-radius: 8px;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .sectionMenu::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 2px;
+            background: linear-gradient(90deg, var(--accent-purple), var(--accent-purple-light));
+        }
+
+        .sectionMenu ul {
+            list-style: none;
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+            gap: 25px;
+        }
+
+        .sectionMenu li {
+            padding: 8px 136px;
+            border: 1px solid var(--border-color);
+            border-radius: 4px;
+            transition: all 0.3s ease;
+            position: relative;
+            overflow: hidden;
+            background: rgba(15, 15, 15, 0.8);
+        }
+
+        .sectionMenu li:hover {
+            border-color: var(--accent-purple);
+            transform: translateY(-2px);
+            box-shadow: 0 0 10px rgba(139, 92, 246, 0.3);
+        }
+
+        a {
+            color: var(--accent-purple-light);
+            text-decoration: none;
+            transition: all 0.3s ease;
+            position: relative;
+        }
+
+        a:hover {
+            color: var(--text-color);
+        }
+
+        .articles {
+            margin-bottom: 40px;
+        }
+
+        .paper-list {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+            gap: 20px;
+            margin-top: 20px;
+            align-items: start;
+        }
+
+        .paper-item {
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+            padding: 20px;
+            border: 1px solid var(--border-color);
+            transition: all 0.3s ease;
+            background-color: var(--paper-bg);
+            height: auto;
+            min-height: 0;
+            border-radius: 8px;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .paper-item:hover {
+            cursor: pointer;
+            border-color: var(--accent-purple);
+            transform: translateY(-5px);
+            background-color: var(--paper-hover);
+        }
+
+        .paper-image {
+            width: 100%;
+            height: 180px;
+            overflow: hidden;
+            border: 1px solid var(--border-color);
+            background-color: #111;
+            margin-bottom: 12px;
+            border-radius: 4px;
+            transition: all 0.3s ease;
+        }
+
+        .paper-item:hover .paper-image {
+            border-color: var(--accent-purple);
+        }
+
+        .paper-image img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            display: block;
+            transition: transform 0.5s ease;
+        }
+
+        .paper-item:hover .paper-image img {
+            transform: scale(1.05);
+        }
+
+        .paper-content {
+            width: 100%;
+        }
+
+        .paper-title {
+            color: #fff;
+            font-weight: bold;
+            margin-bottom: 10px;
+            font-size: 1.2em;
+            position: relative;
+            display: inline-block;
+        }
+
+        .paper-description {
+            color: #888;
+            font-size: 0.9em;
+            margin-bottom: 12px;
+            line-height: 1.5;
+        }
+
+        .paper-tags {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 6px;
+            margin-bottom: 12px;
+        }
+
+        .paper-meta {
+            font-size: 0.85em;
+            color: #888;
+            display: flex;
+            justify-content: space-between;
+            margin-top: 12px;
+        }
+
+        .paper-status {
+            padding: 4px 10px;
+            border-radius: 4px;
+            font-size: 0.8em;
+            margin-top: 8px;
+            display: inline-block;
+        }
+
+        .paper-item-disabled {
+            opacity: 0.7;
+            cursor: not-allowed !important;
+            filter: grayscale(0.7);
+            background-color: rgba(10, 10, 10, 0.8);
+            border-color: #1a1a1a !important;
+            position: relative;
+        }
+
+        .paper-item-disabled:hover {
+            background-color: rgba(10, 10, 10, 0.8) !important;
+            border-color: #1a1a1a !important;
+            transform: none !important;
+            box-shadow: none !important;
+            z-index: 1000;
+        }
+
+        .paper-item-disabled .paper-title {
+            color: #444 !important;
+            text-decoration: line-through;
+        }
+
+        .paper-item-disabled .paper-description {
+            color: #333 !important;
+        }
+
+        .paper-item-disabled .tag {
+            background-color: rgba(30, 30, 30, 0.6) !important;
+            color: #444 !important;
+            border-color: #222 !important;
+        }
+
+        .paper-item-disabled .paper-meta {
+            color: #333 !important;
+        }
+
+        .paper-item-disabled .paper-status {
+            background-color: rgba(40, 40, 40, 0.6) !important;
+            color: #555 !important;
+            border-color: #222 !important;
+            position: relative;
+        }
+
+        .paper-item-disabled .paper-status::before {
+            content: "🔒 ";
+            font-size: 0.7em;
+        }
+
+        .paper-item-disabled .paper-image {
+            filter: grayscale(1) brightness(0.4);
+            border-color: #1a1a1a !important;
+        }
+
+        .paper-item-disabled .paper-image:hover {
+            filter: grayscale(1) brightness(0.4) !important;
+        }
+
+        .paper-item-disabled .paper-image img {
+            transform: none !important;
+        }
+
+        .paper-item-disabled * {
+            pointer-events: none !important;
+        }
+
+        .tag {
+            background-color: rgba(30, 30, 30, 0.7);
+            color: var(--text-color);
+            padding: 4px 10px;
+            font-size: 0.75em;
+            border: 1px solid var(--border-color);
+            border-radius: 12px;
+            text-transform: lowercase;
+            transition: all 0.3s ease;
+        }
+
+        .tag:hover {
+            background-color: rgba(192, 132, 252, 0.3);
+            border-color: var(--accent-purple);
+            cursor: default;
+        }
+
+        .status-purple {
+            background-color: rgba(192, 132, 252, 0.3);
+            color: var(--text-color);
+            border: 1px solid rgba(192, 132, 252, 0.5);
+        }
+
+        .gifs {
+            margin: 50px 0;
+            padding: 20px 0;
+            border-top: 1px solid var(--border-color);
+            border-bottom: 1px solid var(--border-color);
+        }
+
+        .gif-list {
+            display: flex;
+            flex-wrap: nowrap;
+            justify-content: center;
+            align-items: center;
+            gap: 20px;
+            margin-top: 20px;
+            overflow-x: auto;
+            padding: 15px 0;
+        }
+
+        .gif-list img {
+            height: 90px;
+            width: auto;
+            max-width: none;
+            border: none;
+            border-radius: 4px;
+            filter: brightness(1);
+        }
+
+        footer {
+            text-align: center;
+            margin-top: 50px;
+            padding: 25px;
+            border-top: 1px dashed var(--border-color);
+            font-size: 0.85em;
+            color: #555;
+            background-color: #0a0a0a;
+            border-radius: 8px;
+            position: relative;
+        }
+
+        footer p:first-child {
+            margin-bottom: 10px;
+            color: #888;
+        }
+
+        @media (max-width: 768px) {
+            body {
+                padding: 15px;
+                font-size: 15px;
+            }
+
+            .sectionMenu ul {
+                flex-direction: column;
+                align-items: center;
+                gap: 12px;
+            }
+
+            .paper-list {
+                grid-template-columns: 1fr;
+            }
+
+            .bannerAscii {
+                line-height: 14px;
+                font-size: 12px;
+            }
+
+            .banner-text {
+                line-height: 14px;
+                font-size: 20px;
+            }
+
+            .gif-list {
+                flex-wrap: wrap;
+                justify-content: center;
+            }
+
+            .gif-list img {
+                height: 70px;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .bannerAscii {
+                font-size: 0.5em;
+            }
+
+            .gif-list img {
+                height: 60px;
+            }
+            
+            .paper-item {
+                padding: 15px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="background"></div>
+    
+    <main class="top-content">
+        <div class="ascii">
+            <pre class="bannerAscii" id="asciiBanner">
+  ██████  ██▓    ▄▄▄     ▓██   ██▓▓█████  ██▀███  
+▒██    ▒ ▓██▒   ▒████▄    ▒██  ██▒▓█   ▀ ▓██ ▒ ██▒
+░ ▓██▄   ▒██░   ▒██  ▀█▄   ▒██ ██░▒███   ▓██ ░▄█ ▒
+  ▒   ██▒▒██░   ░██▄▄▄▄██  ░ ▐██▓░▒▓█  ▄ ▒██▀▀█▄  
+▒██████▒▒░██████▒▓█   ▓██▒ ░ ██▒▓░░▒████▒░██▓ ▒██▒
+▒ ▒▓▒ ▒ ░░ ▒░▓  ░▒▒   ▓▒█░  ██▒▒▒ ░░ ▒░ ░░ ▒▓ ░▒▓░
+░ ░▒  ░ ░░ ░ ▒  ░ ▒   ▒▒ ░▓██ ░▒░  ░ ░  ░  ░▒ ░ ▒░
+░  ░  ░    ░ ░    ░   ▒   ▒ ▒ ░░     ░     ░░   ░ 
+      ░      ░  ░     ░  ░░ ░        ░  ░   ░     
+                          ░ ░                     
+            </pre>
+            <p class="banner-text">Свобода знаний наша революция</p>
+        </div>
+    </main>
+
+    <section class="sectionMenu">
+        <ul>
+            <li><a href="https://pwnbuffer.org" target="_blank">pwn@buffer</a></li>
+            <li>
+                <a href="https://github.com/slayerkkkk" target="_blank">github</a>
+            </li>
+        </ul>
+    </section>
+
+    <section class="articles">
+        <div class="paper-list">
+            <div class="paper-item" onclick="window.open('/articles/0x01.html', '_blank')" data-slug="0x01">
+                <div class="paper-image">
+                    <img src="/images/thumbs/paper2.png" alt="XMPP 🧸" loading="lazy" />
+                </div>
+                <div class="paper-content">
+                    <div class="paper-title">Shellcode Loader with eBPF</div>
+                    <div class="paper-description">Uma abordagem prática para integração entre kernel-land e user-land</div>
+                    <div class="paper-tags"><span class="tag">Kernel</span> <span class="tag">Linux</span> <span class="tag">low-level</span></div>
+                    <div class="paper-meta">
+                        <span class="paper-author">slayer</span>
+                        <span class="paper-date">2025-11-22</span>
+                    </div>
+                    <div class="paper-status status-purple">Feito!</div>
+                </div>
+            </div>
+        </div>
+        <div class="gif-list">
+            <img src="/images/gifs/brflag.webp" alt="Brazil Flag" />
+            <img src="/images/gifs/dante.gif" alt="Dante">
+        </div>
+    </section>
+
+    <footer>
+        <p>last updated: <span id="current-date"></span></p>
+        <p>За тобой следят. Удали логи!</p>
+    </footer>
+
+    <script>
+        document.getElementById("current-date").textContent =
+            new Date().toLocaleDateString("pt-BR");
+
+        const pre = document.getElementById('asciiBanner');
+        let htmlLines = pre.innerHTML.split('\n');
+        let textLines = pre.innerText.split('\n');
+        let ansii_chars = ['░', '▒', '▓', '█','▌','░','▀','.','·','0','1'];
+        let break_chars = ['*', '*', '`','/', '"', "'"];
+        
+        let fallingChars = new Set();
+        
+        let animationPaused = false;
+        let animationTimer = setInterval(update, 475);
+        
+        document.addEventListener('mousedown', () => {
+            animationPaused = true;
+            clearInterval(animationTimer);
+        });
+        
+        document.addEventListener('mouseup', () => {
+            animationPaused = false;
+            animationTimer = setInterval(update, 150);
+        });
+
+        function findCharPosition(htmlLine, char, targetVisualPos) {
+            let visualPos = 0;
+            let inTag = false;
+            
+            for(let i = 0; i < htmlLine.length; i++) {
+                if(htmlLine[i] === '<') inTag = true;
+                if(!inTag && htmlLine[i] === char && visualPos === targetVisualPos) {
+                    return i;
+                }
+                if(!inTag) visualPos++;
+                if(htmlLine[i] === '>') inTag = false;
+            }
+            return -1;
+        }
+        
+        function update() {
+            if (animationPaused) return;
+            
+            const maxFallDistance = 15;
+
+            for (let y = textLines.length - 2; y >= 0; y--) {
+                for (let x = 0; x < textLines[y].length; x++) {
+                    let currentChar = textLines[y][x];
+                    let charKey = `${x},${y}`;
+                    
+                    if (ansii_chars.includes(currentChar)) {
+                        if (!fallingChars.has(charKey) && Math.random() < 0.01 && textLines[y + 1][x] === ' ') {
+                            fallingChars.add(charKey);
+                        }
+                        
+                        if (fallingChars.has(charKey)) {
+                            let fallDistance = 1;
+                            if (Math.random() < 0.3) fallDistance = 2;
+                            let targetY = Math.min(y + fallDistance, textLines.length - 1);
+                            let canFall = true;
+                            for (let checkY = y + 1; checkY <= targetY; checkY++) {
+                                if (textLines[checkY][x] !== ' ') {
+                                    targetY = checkY - 1;
+                                    canFall = false;
+                                    break;
+                                }
+                            }
+                            
+                            if (targetY - y > maxFallDistance) {
+                                let htmlPos = findCharPosition(htmlLines[y], currentChar, x);
+                                if (htmlPos !== -1) {
+                                    htmlLines[y] = setCharAt(htmlLines[y], htmlPos, ' ');
+                                    textLines[y] = setCharAt(textLines[y], x, ' ');
+                                }
+                                fallingChars.delete(charKey);
+                                continue;
+                            }
+                            
+                            if (canFall && targetY > y) {
+                                let htmlPos = findCharPosition(htmlLines[y], currentChar, x);
+                                let targetPos = findCharPosition(htmlLines[targetY], ' ', x);
+                                
+                                if(htmlPos !== -1 && targetPos !== -1) {
+                                    htmlLines[targetY] = setCharAt(htmlLines[targetY], targetPos, currentChar);
+                                    htmlLines[y] = setCharAt(htmlLines[y], htmlPos, ' ');
+                                    textLines[targetY] = setCharAt(textLines[targetY], x, currentChar);
+                                    textLines[y] = setCharAt(textLines[y], x, ' ');
+                                    fallingChars.delete(charKey);
+                                    fallingChars.add(`${x},${targetY}`);
+                                }
+                            } else if (!canFall) {
+                                fallingChars.delete(charKey);
+                                let htmlPos = findCharPosition(htmlLines[y], currentChar, x);
+                                if(htmlPos !== -1) {
+                                    for (let i = -1; i <= 1; i++) {
+                                        if (x + i >= 0 && x + i < textLines[y].length && textLines[y][x + i] === ' ') {
+                                            let breakChar = break_chars[Math.floor(Math.random() * break_chars.length)];
+                                            let breakHtmlPos = findCharPosition(htmlLines[y], ' ', x + i);
+                                            if (breakHtmlPos !== -1) {
+                                                htmlLines[y] = setCharAt(htmlLines[y], breakHtmlPos, breakChar);
+                                                textLines[y] = setCharAt(textLines[y], x + i, breakChar);
+                                            }
+                                        }
+                                    }
+                                    let breakChar = break_chars[Math.floor(Math.random() * break_chars.length)];
+                                    htmlLines[y] = setCharAt(htmlLines[y], htmlPos, breakChar);
+                                    textLines[y] = setCharAt(textLines[y], x, breakChar);
+                                }
+                            }
+                        }
+                    } else if (break_chars.includes(currentChar)) {
+                        if (y + 1 < textLines.length) {
+                            if (textLines[y + 1][x] === ' ') {
+                                let htmlPos = findCharPosition(htmlLines[y], currentChar, x);
+                                let targetPos = findCharPosition(htmlLines[y + 1], ' ', x);
+                                
+                                if(htmlPos !== -1 && targetPos !== -1) {
+                                    htmlLines[y + 1] = setCharAt(htmlLines[y + 1], targetPos, currentChar);
+                                    htmlLines[y] = setCharAt(htmlLines[y], htmlPos, ' ');
+                                    textLines[y + 1] = setCharAt(textLines[y + 1], x, currentChar);
+                                    textLines[y] = setCharAt(textLines[y], x, ' ');
+                                }
+                            } else {
+                                let canSlideLeft = x > 0 && textLines[y + 1][x - 1] === ' ';
+                                let canSlideRight = x < textLines[y].length - 1 && textLines[y + 1][x + 1] === ' ';
+                                
+                                if (canSlideLeft && canSlideRight) {
+                                    let direction = Math.random() < 0.5 ? -1 : 1;
+                                    let htmlPos = findCharPosition(htmlLines[y], currentChar, x);
+                                    let targetPos = findCharPosition(htmlLines[y + 1], ' ', x + direction);
+                                    
+                                    if(htmlPos !== -1 && targetPos !== -1) {
+                                        htmlLines[y + 1] = setCharAt(htmlLines[y + 1], targetPos, currentChar);
+                                        htmlLines[y] = setCharAt(htmlLines[y], htmlPos, ' ');
+                                        textLines[y + 1] = setCharAt(textLines[y + 1], x + direction, currentChar);
+                                        textLines[y] = setCharAt(textLines[y], x, ' ');
+                                    }
+                                } else if (canSlideLeft) {
+                                    let htmlPos = findCharPosition(htmlLines[y], currentChar, x);
+                                    let targetPos = findCharPosition(htmlLines[y + 1], ' ', x - 1);
+                                    
+                                    if(htmlPos !== -1 && targetPos !== -1) {
+                                        htmlLines[y + 1] = setCharAt(htmlLines[y + 1], targetPos, currentChar);
+                                        htmlLines[y] = setCharAt(htmlLines[y], htmlPos, ' ');
+                                        textLines[y + 1] = setCharAt(textLines[y + 1], x - 1, currentChar);
+                                        textLines[y] = setCharAt(textLines[y], x, ' ');
+                                    }
+                                } else if (canSlideRight) {
+                                    let htmlPos = findCharPosition(htmlLines[y], currentChar, x);
+                                    let targetPos = findCharPosition(htmlLines[y + 1], ' ', x + 1);
+                                    
+                                    if(htmlPos !== -1 && targetPos !== -1) {
+                                        htmlLines[y + 1] = setCharAt(htmlLines[y + 1], targetPos, currentChar);
+                                        htmlLines[y] = setCharAt(htmlLines[y], htmlPos, ' ');
+                                        textLines[y + 1] = setCharAt(textLines[y + 1], x + 1, currentChar);
+                                        textLines[y] = setCharAt(textLines[y], x, ' ');
+                                    }
+                                }
+                            }
+                        }
+                        
+                        if (y > maxFallDistance) {
+                            let htmlPos = findCharPosition(htmlLines[y], currentChar, x);
+                            if (htmlPos !== -1) {
+                                htmlLines[y] = setCharAt(htmlLines[y], htmlPos, ' ');
+                                textLines[y] = setCharAt(textLines[y], x, ' ');
+                            }
+                        }
+                    }
+                }
+            }
+            
+            pre.innerHTML = htmlLines.join('\n');
+        }
+
+        function setCharAt(str, index, chr) {
+            if (index > str.length - 1) return str;
+            return str.substring(0, index) + chr + str.substring(index + 1);
+        }
+
+        const background = document.querySelector('.background');
+        const cols = Math.floor(window.innerWidth / 5);
+        const rows = Math.floor(window.innerHeight / 5);
+        
+        function initBackground() {
+            let emptyGrid = '';
+            for(let y = 0; y < rows; y++) {
+                for(let x = 0; x < cols; x++) {
+                    emptyGrid += ' ';
+                }
+                emptyGrid += '\n';
+            }
+            background.innerHTML = `<pre>${emptyGrid}</pre>`;
+        }
+        
+
+        let bgLayers = [
+            Array(rows).fill().map(() => Array(cols).fill(' ')), 
+            Array(rows).fill().map(() => Array(cols).fill(' ')), 
+            Array(rows).fill().map(() => Array(cols).fill(' '))  
+        ];
+        const rainTrail = ['│', '╎', '┆', '·'];
+        let windForce = 0.5;
+        let targetWindForce = 0;
+        const maxWindForce = 1;
+        
+        function updateBackground() {
+            if(Math.random() < 0.01) {
+                targetWindForce = (Math.random() - 0.5) * maxWindForce;
+            }
+            windForce += (targetWindForce - windForce) * 0.1;
+            
+            for(let x = 0; x < cols; x++) {
+                if(Math.random() < 0.01) {
+                    bgLayers[0][0][x] = {
+                        char: rainTrail[0],
+                        offset: windForce + (Math.random() - 0.5) * 0.2
+                    };
+                }
+                if(Math.random() < 0.02) {
+                    bgLayers[1][0][x] = {
+                        char: rainTrail[1],
+                        offset: windForce * 0.8 + (Math.random() - 0.5) * 0.3
+                    };
+                }
+
+                if(Math.random() < 0.03) {
+                    bgLayers[2][0][x] = {
+                        char: rainTrail[2],
+                        offset: windForce * 1.2 + (Math.random() - 0.5) * 0.4
+                    };
+                }
+            }
+
+            for(let layer = 0; layer < bgLayers.length; layer++) {
+                for(let y = rows-1; y >= 0; y--) {
+                    for(let x = 0; x < cols; x++) {
+                        if(bgLayers[layer][y][x] !== ' ' && typeof bgLayers[layer][y][x] === 'object') {
+                            let drop = bgLayers[layer][y][x];
+                            let trailIndex = rainTrail.indexOf(drop.char);
+                            
+                            bgLayers[layer][y][x] = ' ';
+                            
+                            if(y < rows-1) {
+                                let newX = Math.round(x + drop.offset + windForce * 0.5);
+                                newX = Math.max(0, Math.min(cols - 1, newX));
+                                
+                                if(bgLayers[layer][y+1][newX] === ' ') {
+                                    bgLayers[layer][y+1][newX] = {
+                                        char: drop.char,
+                                        offset: drop.offset 
+                                    };
+                                    
+                                    if(y > 0 && trailIndex < rainTrail.length - 1 && Math.random() > 0.3) {
+                                        let trailX = Math.round(x - windForce * 0.5);
+                                        if(trailX >= 0 && trailX < cols) {
+                                            bgLayers[layer][y][trailX] = {
+                                                char: rainTrail[trailIndex + 1],
+                                                offset: drop.offset * 0.8
+                                            };
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+
+            let combinedGrid = Array(rows).fill().map(() => Array(cols).fill(' '));
+            for(let y = 0; y < rows; y++) {
+                for(let x = 0; x < cols; x++) {
+                    for(let layer = 0; layer < bgLayers.length; layer++) {
+                        if(bgLayers[layer][y][x] !== ' ' && typeof bgLayers[layer][y][x] === 'object') {
+                            combinedGrid[y][x] = bgLayers[layer][y][x].char;
+                        }
+                    }
+                }
+            }
+            
+            background.innerHTML = `<pre>${combinedGrid.map(row => row.join('')).join('\n')}</pre>`;
+        }
+        
+        initBackground();
+        setInterval(updateBackground, 50);
+    </script>
+</body>
+</html>

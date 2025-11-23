@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>/exit</title>
+    <style>
+      @font-face {
+        font-family: "gohu";
+        src: url("/files/font/gohu.woff2") format("woff2"),
+          url("/files/font/gohu.woff") format("woff"),
+          url("/files/font/gohu.ttf") format("truetype");
+        font-weight: normal;
+        font-style: normal;
+      }
+
+      html,
+      body {
+        height: 100%;
+        margin: 0;
+        font-family: "gohu", monospace;
+        color: #fff;
+        background-color: black;
+        display: grid;
+        place-items: center;
+        text-align: center;
+      }
+
+      .container {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        gap: 1.5rem;
+      }
+
+      h1 {
+        margin: 0;
+        font-size: clamp(2rem, 10vw, 5rem);
+      }
+
+      img {
+        max-width: 90%;
+        height: auto;
+      }
+
+      .back-home {
+        display: inline-block;
+        padding: 0.75rem 1.5rem;
+        font-family: "gohu", monospace;
+        font-size: 1rem;
+        color: #fff;
+        background-color: #222;
+        border: 2px solid #fff;
+        text-decoration: none;
+        transition: 0.2s;
+      }
+
+      .back-home:hover {
+        color: #000;
+        background-color: #fff;
+        border-color: #fff;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="container">
+      <h1>404</h1>
+      <img src="https://img.wattpad.com/1cd63ee94ee5280b79f1aee22d333500016e7f3c/68747470733a2f2f73332e616d617a6f6e6177732e636f6d2f776174747061642d6d656469612d736572766963652f53746f7279496d6167652f326a743952514939484b5a5774773d3d2d313533363539353338332e313834326366396531353330313536353931333630303030323639312e676966" alt="GIF" />
+      <a href="/" class="back-home">Back to Home</a>
+    </div>
+  </body>
+</html>
