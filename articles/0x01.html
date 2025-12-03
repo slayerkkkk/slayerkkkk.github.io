@@ -45,6 +45,16 @@
             position: relative;
         }
 
+        .code {
+            overflow: auto;
+            -ms-overflow-style: none;     /* IE e Edge antigo */
+            scrollbar-width: none;        /* Firefox */
+        }
+
+        .code::-webkit-scrollbar {
+            display: none;                /* Chrome, Safari, Edge */
+        }
+
         .background {
             position: fixed;
             top: 0;
