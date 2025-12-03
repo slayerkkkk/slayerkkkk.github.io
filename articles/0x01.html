@@ -45,15 +45,15 @@
             position: relative;
         }
 
-        .code {
-            overflow: auto;
-            -ms-overflow-style: none;     /* IE e Edge antigo */
-            scrollbar-width: none;        /* Firefox */
+        .minha-classe::-webkit-scrollbar {
+            width: 4px;
+            opacity: 0;
         }
 
-        .code::-webkit-scrollbar {
-            display: none;                /* Chrome, Safari, Edge */
+        .minha-classe:hover::-webkit-scrollbar-thumb {
+            background: #777;
         }
+
 
         .background {
             position: fixed;
